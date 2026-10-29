@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="하늘그네 봇 조직, 정보 흐름, 판단 단계를 보여주는 인터랙티브 지도. 메일·계정·키는 없습니다.">
+  <title>하늘그네 봇 조직도</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='16' height='16' fill='%23C8102E'/%3E%3Crect x='16' width='16' height='16' fill='%230A3D91'/%3E%3Crect y='16' width='32' height='16' fill='%23FFD100'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#org">본문으로</a>
+  <header class="site-header">
+    <div class="stripe" aria-hidden="true"></div>
+    <div class="wrap bar">
+      <a class="brand" href="#org">
+        <span class="emblem" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-text">
+          <span class="brand-kicker">BOT MAP</span>
+          <span class="brand-title">하늘그네 봇 조직도</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="구역">
+        <a href="#org">조직</a>
+        <a href="#flow">흐름</a>
+        <a href="#pipe">판단</a>
+        <a href="#rules">규칙</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <noscript>
+      <p class="noscript">이 지도는 자바스크립트로 움직입니다. 브라우저에서 스크립트를 켜 주세요.</p>
+    </noscript>
+
+    <section id="org" aria-labelledby="org-title">
+      <header class="sec-head">
+        <span class="sec-no">01</span>
+        <div>
+          <h2 id="org-title">조직</h2>
+          <p class="lead">노드를 누르면 역할, 도구, 규칙이 나옵니다. 위에 올리면 그 연결만 굵어집니다. 색 선은 방이고, 자원은 빨간 선으로 이어집니다.</p>
+        </div>
+      </header>
+      <ul class="legend">
+        <li><i class="lg lg-cmd" aria-hidden="true"></i>지휘</li>
+        <li><i class="lg lg-room" aria-hidden="true"></i>방</li>
+        <li><i class="lg lg-res" aria-hidden="true"></i>자원</li>
+      </ul>
+      <p class="scroll-hint" id="scrollHint" hidden>양옆으로 밀면 조직 전체가 보입니다.</p>
+      <div class="org-layout">
+        <div class="board-scroll" id="boardScroll">
+          <div class="board" id="board" role="group" aria-label="조직 그래프">
+            <svg class="links" id="links" aria-hidden="true"></svg>
+            <div class="row row-center" id="rowOwner"></div>
+            <div class="row row-center" id="rowChief"></div>
+            <div class="row row-staff" id="staffRow"></div>
+            <div class="lane-gap" id="laneGap" aria-hidden="true"></div>
+            <div class="row row-rooms" id="roomRow"></div>
+            <div class="res-wrap" id="resWrap"></div>
+          </div>
+        </div>
+        <aside class="detail" id="detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="flow" aria-labelledby="flow-title">
+      <header class="sec-head">
+        <span class="sec-no">02</span>
+        <div>
+          <h2 id="flow-title">흐름</h2>
+          <p class="lead">시나리오를 고르고 재생하거나, 이전·다음으로 한 칸씩 봅니다. 노란 조각이 패킷입니다.</p>
+        </div>
+      </header>
+      <div class="scenarios" id="scenarioBar" role="group" aria-label="시나리오"></div>
+      <div class="flow-controls">
+        <button type="button" id="flowPrev">이전</button>
+        <button type="button" id="flowPlay" aria-pressed="false">재생</button>
+        <p id="flowCount" class="flow-count">1 / 8</p>
+        <button type="button" id="flowNext">다음</button>
+      </div>
+      <div class="flow-stage" id="flowStage">
+        <div class="track" id="track"></div>
+      </div>
+      <div class="readout" id="flowReadout" aria-live="polite"></div>
+    </section>
+
+    <section id="pipe" aria-labelledby="pipe-title">
+      <header class="sec-head">
+        <span class="sec-no">03</span>
+        <div>
+          <h2 id="pipe-title">판단</h2>
+          <p class="lead">일을 받은 뒤부터 드라이브에 남기기까지. 단계를 누르거나 이전·다음으로 이동합니다.</p>
+        </div>
+      </header>
+      <div class="pipe">
+        <div class="pipe-list" id="pipeList" role="list"></div>
+        <div class="pipe-main">
+          <div class="pipe-panel" id="pipePanel" aria-live="polite"></div>
+          <div class="pipe-nav">
+            <button type="button" id="pipePrev">이전</button>
+            <button type="button" id="pipeNext">다음</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rules" aria-labelledby="rules-title">
+      <header class="sec-head">
+        <span class="sec-no">04</span>
+        <div>
+          <h2 id="rules-title">규칙</h2>
+          <p class="lead">승인, 봇끼리 문장, 커넥터 범위, 미발표 원고, 비밀. 표의 이름을 누르면 조직도로 갑니다.</p>
+        </div>
+      </header>
+      <div class="rule-grid">
+        <article class="rule-card">
+          <h3>승인 대상</h3>
+          <p>이 다섯은 주보 님이 승인하기 전에 실행하지 않는다.</p>
+          <ul class="stamps">
+            <li>메일 발송</li>
+            <li>삭제</li>
+            <li>결제</li>
+            <li>제출</li>
+            <li>배포</li>
+          </ul>
+          <p>봇은 초안과 준비까지. 보내는 손은 승인 다음에만.</p>
+        </article>
+        <article class="rule-card">
+          <h3>봇끼리 말</h3>
+          <p>결론 1줄과 링크. 전부 3줄 이하.</p>
+          <ol class="msg3">
+            <li>결론 한 줄</li>
+            <li>링크</li>
+            <li class="empty">여기까지</li>
+          </ol>
+          <p>긴 원고는 채팅이 아니라 Drive에 두고 링크만 보낸다.</p>
+        </article>
+        <article class="rule-card">
+          <h3>커넥터 범위</h3>
+          <p>봇은 아래 표에서 채워진 칸만 쓴다. 없는 칸은 그 봇 일이다.</p>
+          <p>주보 님은 커넥터를 상시로 쓰지 않고 승인한다. Gmail 발송, X 게시, GitHub 배포도 승인 대상이다.</p>
+        </article>
+        <article class="rule-card">
+          <h3>미발표 원고</h3>
+          <p class="ban"><b>무료 AI</b> × 미발표 원고·콘티</p>
+          <p class="ok"><b>Claude API 선불</b> 원고 가능</p>
+          <p>OpenRouter에는 이미 공개된 자료만. 그록 이매진에는 그림 지시만 넣고 원고 전문은 넣지 않는다.</p>
+        </article>
+        <article class="rule-card">
+          <h3>비밀</h3>
+          <p class="ban">비밀번호 · 키 · 토큰 · 채팅 금지</p>
+          <p>비밀번호, API 키, 토큰, 복구 코드는 채팅, 방, 공유 메모리, 코드에 쓰지 않는다. 이름만 말하고 값은 비밀번호 관리자에 둔다.</p>
+        </article>
+      </div>
+      <h3 class="subhead">봇별 커넥터·도구</h3>
+      <div id="matrixMount"></div>
+      <p class="note">칸이 채워지면 그 봇의 범위다. 비서실장의 Gmail은 초안만이고 발송은 주보 님 승인이다. 웹은 공개 페이지를 읽는 일이다.</p>
+      <h3 class="subhead">바깥 AI</h3>
+      <div id="aiMount"></div>
+      <p class="note">미발표 원고는 Claude API(선불)만. OpenRouter는 공개 자료만. Cursor 클라우드 에이전트는 개발봇의 웹 작업이다.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>정적 페이지. 빌드 없음. 메일, 계정, 비밀번호, 키는 없습니다.</p>
+      <p>색과 도형은 88 서울 올림픽 그래픽의 기하학을 참고했습니다. 공식 엠블럼은 쓰지 않습니다.</p>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
